@@ -1,0 +1,1836 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Brian Tomadin — Backend Developer · Java &amp; Spring Boot</title>
+    <meta id="meta-description"
+      name="description"
+      content="Desarrollador backend en Java y Spring Boot. Sistema propio en producción operando en Mendoza. Disponible para trabajo remoto."
+    />
+
+    <!-- ============================================================
+     PENDIENTES (buscá "TODO"):
+     1. TODO-FOTO: tu foto en la sección "Sobre mí".
+        Guardala como img/brian.jpg y reemplazá el bloque .me-photo.
+     2. TODO-REPO: verificá que los enlaces de los proyectos apunten
+        a los repositorios públicos correctos.
+     Idioma por defecto: const DEFAULT_LANG al final del archivo.
+============================================================ -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@400;500;600&family=Silkscreen&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --night-0: #0b0820; /* cielo profundo */
+        --night-1: #141031; /* paneles */
+        --night-2: #1c1640; /* paneles hover / bordes suaves */
+        --cloud-deep: #3b2d6e;
+        --cloud-mid: #5a3fa0;
+        --cloud-hi: #8b6fd8;
+        --cloud-glow: #c4b5f0;
+        --txt: #ece8f8;
+        --txt-dim: #a79fc9;
+        --accent: #ffb86b; /* sol de atardecer pixel */
+        --line: 1px solid rgba(196, 181, 240, 0.16);
+        --radius: 10px;
+        --pix: "Silkscreen", monospace;
+        --mono: "JetBrains Mono", monospace;
+        --body: "Manrope", sans-serif;
+        --display: "Sora", sans-serif;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        background: var(--night-0);
+        color: var(--txt);
+        font-family: var(--body);
+        font-size: 17px;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+      ::selection {
+        background: var(--cloud-mid);
+        color: #fff;
+      }
+      a {
+        color: var(--cloud-glow);
+      }
+      a:focus-visible,
+      button:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+        border-radius: 4px;
+      }
+      .wrap {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 0 22px;
+      }
+      .pix {
+        font-family: var(--pix);
+      }
+      .mono {
+        font-family: var(--mono);
+      }
+      svg.pxl {
+        image-rendering: pixelated;
+        shape-rendering: crispEdges;
+      }
+
+      /* ---------------- header ---------------- */
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 60;
+        background: rgba(11, 8, 32, 0.82);
+        backdrop-filter: blur(10px);
+        border-bottom: var(--line);
+      }
+      .bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 13px 22px;
+      }
+      .brand {
+        font-family: var(--pix);
+        font-size: 0.85rem;
+        color: var(--txt);
+        text-decoration: none;
+        letter-spacing: 0.02em;
+      }
+      .brand b {
+        color: var(--accent);
+        font-weight: 400;
+      }
+      nav {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+      }
+      nav a.navlink {
+        font-family: var(--mono);
+        font-size: 0.78rem;
+        text-transform: lowercase;
+        color: var(--txt-dim);
+        text-decoration: none;
+        letter-spacing: 0.03em;
+        transition: color 0.15s ease;
+      }
+      nav a.navlink:hover {
+        color: var(--cloud-glow);
+      }
+      .lang {
+        display: flex;
+        border: var(--line);
+        border-radius: 6px;
+        overflow: hidden;
+      }
+      .lang button {
+        font-family: var(--mono);
+        font-size: 0.74rem;
+        font-weight: 600;
+        background: none;
+        border: none;
+        padding: 6px 11px;
+        cursor: pointer;
+        color: var(--txt-dim);
+        transition:
+          background 0.15s ease,
+          color 0.15s ease;
+      }
+      .lang button[aria-pressed="true"] {
+        background: var(--cloud-mid);
+        color: #fff;
+      }
+      @media (max-width: 720px) {
+        nav a.navlink {
+          display: none;
+        }
+      }
+
+      /* ---------------- hero / cielo ---------------- */
+      .hero {
+        position: relative;
+        overflow: hidden;
+        border-bottom: var(--line);
+      }
+      .sky {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        background: linear-gradient(
+          180deg,
+          #070512 0%,
+          #0e0a26 34%,
+          #1d1342 72%,
+          #33205c 100%
+        );
+      }
+      .stars {
+        position: absolute;
+        inset: 0;
+      }
+      .star {
+        position: absolute;
+        width: 3px;
+        height: 3px;
+        background: #e8e2ff;
+        opacity: 0.7;
+        animation: twinkle 3.2s ease-in-out infinite;
+      }
+      .star.s2 {
+        width: 2px;
+        height: 2px;
+        opacity: 0.45;
+      }
+      @keyframes twinkle {
+        0%,
+        100% {
+          opacity: 0.75;
+        }
+        50% {
+          opacity: 0.12;
+        }
+      }
+
+      .cloud {
+        position: absolute;
+        will-change: transform;
+      }
+      .drift-a {
+        animation: driftA 95s linear infinite;
+      }
+      .drift-b {
+        animation: driftB 140s linear infinite;
+      }
+      .drift-c {
+        animation: driftC 70s linear infinite;
+      }
+      @keyframes driftA {
+        from {
+          transform: translateX(-30vw);
+        }
+        to {
+          transform: translateX(110vw);
+        }
+      }
+      @keyframes driftB {
+        from {
+          transform: translateX(-45vw);
+        }
+        to {
+          transform: translateX(115vw);
+        }
+      }
+      @keyframes driftC {
+        from {
+          transform: translateX(-25vw);
+        }
+        to {
+          transform: translateX(112vw);
+        }
+      }
+      .moon {
+        position: absolute;
+        top: 54px;
+        right: 7%;
+        opacity: 0.95;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+        .star,
+        .cloud {
+          animation: none !important;
+        }
+        .drift-a {
+          transform: translateX(8vw);
+        }
+        .drift-b {
+          transform: translateX(46vw);
+        }
+        .drift-c {
+          transform: translateX(70vw);
+        }
+        * {
+          transition: none !important;
+        }
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        padding: 108px 0 96px;
+      }
+      .eyebrow {
+        font-family: var(--pix);
+        font-size: 0.72rem;
+        color: var(--cloud-glow);
+        letter-spacing: 0.05em;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 14px;
+        margin-bottom: 24px;
+        text-shadow: 0 2px 12px rgba(11, 8, 32, 0.9);
+      }
+      .eyebrow span + span::before {
+        content: "✦";
+        margin-right: 14px;
+        color: var(--accent);
+      }
+      h1 {
+        font-family: var(--display);
+        font-weight: 800;
+        font-size: clamp(2.3rem, 6vw, 4.3rem);
+        line-height: 1.08;
+        letter-spacing: -0.02em;
+        max-width: 20ch;
+        text-shadow: 0 4px 30px rgba(7, 5, 18, 0.8);
+      }
+      h1 em {
+        font-style: normal;
+        color: var(--accent);
+      }
+      .hero p.lead {
+        max-width: 60ch;
+        margin-top: 24px;
+        font-size: 1.07rem;
+        color: var(--txt);
+        text-shadow: 0 2px 16px rgba(7, 5, 18, 0.85);
+      }
+      .statusline {
+        margin-top: 42px;
+        display: inline-flex;
+        flex-wrap: wrap;
+        gap: 14px 22px;
+        align-items: center;
+        background: rgba(11, 8, 32, 0.66);
+        border: var(--line);
+        border-radius: var(--radius);
+        backdrop-filter: blur(6px);
+        font-family: var(--mono);
+        font-size: 0.8rem;
+        color: var(--txt-dim);
+        padding: 13px 18px;
+      }
+      .statusline b {
+        color: var(--txt);
+        font-weight: 600;
+      }
+      .dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 0;
+        background: #7ee787;
+        display: inline-block;
+        margin-right: 8px;
+        animation: twinkle 2.6s steps(2) infinite;
+      }
+
+      /* ---------------- secciones ---------------- */
+      section {
+        padding: 78px 0;
+        border-bottom: var(--line);
+      }
+      .sec-label {
+        font-family: var(--pix);
+        font-size: 0.7rem;
+        color: var(--accent);
+        letter-spacing: 0.06em;
+        display: block;
+        margin-bottom: 14px;
+      }
+      h2 {
+        font-family: var(--display);
+        font-weight: 800;
+        font-size: clamp(1.6rem, 3.4vw, 2.3rem);
+        letter-spacing: -0.015em;
+        margin-bottom: 18px;
+      }
+      h3 {
+        font-family: var(--display);
+        font-weight: 600;
+        font-size: 1.02rem;
+        margin-bottom: 8px;
+      }
+      p {
+        color: var(--txt-dim);
+      }
+      p strong {
+        color: var(--txt);
+        font-weight: 600;
+      }
+
+      .panel {
+        background: var(--night-1);
+        border: var(--line);
+        border-radius: var(--radius);
+        transition:
+          border-color 0.2s ease,
+          box-shadow 0.2s ease,
+          transform 0.2s ease;
+      }
+      .panel:hover {
+        border-color: rgba(196, 181, 240, 0.34);
+        box-shadow:
+          0 0 0 1px rgba(139, 111, 216, 0.15),
+          0 14px 44px -18px rgba(90, 63, 160, 0.55);
+      }
+
+      /* ---------------- caso real ---------------- */
+      .case {
+        display: grid;
+        grid-template-columns: 1.25fr 0.85fr;
+        gap: 34px;
+        align-items: start;
+      }
+      @media (max-width: 840px) {
+        .case {
+          grid-template-columns: 1fr;
+        }
+      }
+      .case-narrative p {
+        margin-bottom: 16px;
+        max-width: 62ch;
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 18px;
+      }
+      .chip {
+        font-family: var(--mono);
+        font-size: 0.73rem;
+        color: var(--cloud-glow);
+        border: 1px solid rgba(139, 111, 216, 0.35);
+        border-radius: 6px;
+        padding: 4px 10px;
+        background: rgba(90, 63, 160, 0.12);
+      }
+      .ficha {
+        overflow: hidden;
+      }
+      .ficha-head {
+        font-family: var(--pix);
+        font-size: 0.7rem;
+        color: var(--txt);
+        padding: 12px 16px;
+        border-bottom: var(--line);
+        background: linear-gradient(90deg, var(--cloud-deep), var(--cloud-mid));
+        letter-spacing: 0.05em;
+      }
+      .ficha table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+      }
+      .ficha td {
+        padding: 11px 16px;
+        border-bottom: var(--line);
+        vertical-align: top;
+        color: var(--txt);
+      }
+      .ficha tr:last-child td {
+        border-bottom: none;
+      }
+      .ficha td:first-child {
+        font-family: var(--mono);
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        width: 40%;
+        color: var(--txt-dim);
+      }
+
+      .metrics {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+        margin-top: 34px;
+      }
+      @media (max-width: 640px) {
+        .metrics {
+          grid-template-columns: 1fr;
+        }
+      }
+      .metric {
+        padding: 20px;
+        text-align: left;
+      }
+      .metric .num {
+        font-family: var(--display);
+        font-weight: 800;
+        font-size: 2rem;
+        line-height: 1;
+        color: var(--txt);
+      }
+      .metric .lab {
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        margin-top: 9px;
+        color: var(--txt-dim);
+      }
+      /* TODO-METRICA: si conseguís usuarios activos / uptime, agregá otro .metric */
+
+      /* ---------------- visor de screenshots ---------------- */
+      .viewer {
+        margin-top: 34px;
+        overflow: hidden;
+      }
+      .viewer-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        padding: 14px 16px;
+        border-bottom: var(--line);
+      }
+      .tab-group {
+        font-family: var(--pix);
+        font-size: 0.62rem;
+        color: var(--accent);
+        margin: 0 4px 0 8px;
+      }
+      .tab-group:first-child {
+        margin-left: 0;
+      }
+      .vtab {
+        font-family: var(--mono);
+        font-size: 0.74rem;
+        font-weight: 500;
+        background: none;
+        border: 1px solid rgba(196, 181, 240, 0.25);
+        border-radius: 999px;
+        color: var(--txt-dim);
+        padding: 6px 13px;
+        cursor: pointer;
+        transition:
+          background 0.15s ease,
+          color 0.15s ease,
+          border-color 0.15s ease;
+      }
+      .vtab:hover {
+        color: var(--txt);
+        border-color: var(--cloud-hi);
+      }
+      .vtab[aria-selected="true"] {
+        background: var(--cloud-mid);
+        border-color: var(--cloud-mid);
+        color: #fff;
+      }
+      .viewer-stage {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        padding: 26px 22px;
+        min-height: 380px;
+        background:
+          radial-gradient(
+            ellipse at 50% 0%,
+            rgba(90, 63, 160, 0.16),
+            transparent 65%
+          ),
+          var(--night-0);
+      }
+      .viewer-stage img {
+        max-width: 100%;
+        max-height: 540px;
+        object-fit: contain;
+        display: block;
+        border-radius: var(--radius);
+        border: 1px solid rgba(196, 181, 240, 0.22);
+        background: #fff;
+        box-shadow: 0 18px 48px -18px rgba(0, 0, 0, 0.65);
+        opacity: 1;
+        transition: opacity 0.18s ease;
+      }
+      .viewer-stage img.portrait {
+        max-height: 520px;
+        border-radius: 22px;
+        background: #000;
+      }
+      .viewer-stage img.fading {
+        opacity: 0;
+      }
+      .viewer-stage figcaption {
+        font-family: var(--mono);
+        font-size: 0.74rem;
+        color: var(--txt-dim);
+        text-align: center;
+      }
+      .gallery-note {
+        font-size: 0.85rem;
+        margin-top: 18px;
+        font-family: var(--mono);
+        color: var(--txt-dim);
+      }
+
+      /* ---------------- grilla de tecnologías ---------------- */
+      .tech-grid {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 14px;
+        margin-bottom: 22px;
+      }
+      @media (max-width: 860px) {
+        .tech-grid {
+          grid-template-columns: repeat(4, 1fr);
+        }
+      }
+      @media (max-width: 560px) {
+        .tech-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      .tech {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 11px;
+        padding: 18px 8px 14px;
+        text-align: center;
+      }
+      .tech img {
+        width: 42px;
+        height: 42px;
+        object-fit: contain;
+      }
+      .tech span {
+        font-family: var(--mono);
+        font-size: 0.7rem;
+        color: var(--txt);
+      }
+      .tech-extra {
+        font-family: var(--mono);
+        font-size: 0.82rem;
+        color: var(--txt-dim);
+        line-height: 1.8;
+      }
+      .tech-extra b {
+        color: var(--cloud-glow);
+        font-weight: 600;
+      }
+
+      /* ---------------- foto ---------------- */
+      .me-col {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+      .me-photo {
+        width: 100%;
+        /* Mostrar más de la foto y evitar que el rostro quede demasiado cerca. */
+        aspect-ratio: 3/4;
+        height: auto;
+        display: block;
+        object-fit: contain;
+        object-position: center;
+        border-radius: var(--radius);
+        border: 1px solid rgba(196, 181, 240, 0.22);
+        background: var(--night-1);
+      }
+
+      /* ---------------- proyectos ---------------- */
+      .projects {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+      }
+      @media (max-width: 760px) {
+        .projects {
+          grid-template-columns: 1fr;
+        }
+      }
+      .proj {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+      .proj-head {
+        padding: 18px 20px;
+        border-bottom: var(--line);
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 10px;
+      }
+      .proj-head h3 {
+        font-size: 1.25rem;
+        margin: 0;
+      }
+      .proj-tag {
+        font-family: var(--pix);
+        font-size: 0.62rem;
+        color: var(--accent);
+        white-space: nowrap;
+      }
+      .proj-body {
+        padding: 18px 20px;
+        flex: 1;
+      }
+      .proj-body p {
+        font-size: 0.94rem;
+        margin-bottom: 13px;
+      }
+      .proj-body ul {
+        list-style: none;
+        font-size: 0.88rem;
+        color: var(--txt-dim);
+      }
+      .proj-body li {
+        padding-left: 20px;
+        position: relative;
+        margin-bottom: 8px;
+      }
+      .proj-body li::before {
+        content: "▸";
+        position: absolute;
+        left: 0;
+        color: var(--cloud-hi);
+        font-family: var(--mono);
+      }
+      .proj-foot {
+        padding: 15px 20px;
+        border-top: var(--line);
+      }
+      .btn {
+        display: inline-block;
+        font-family: var(--mono);
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--txt);
+        text-decoration: none;
+        border: 1px solid rgba(196, 181, 240, 0.3);
+        border-radius: 8px;
+        padding: 8px 14px;
+        transition:
+          background 0.15s ease,
+          border-color 0.15s ease,
+          transform 0.15s ease;
+      }
+      .btn:hover {
+        background: var(--cloud-deep);
+        border-color: var(--cloud-hi);
+        transform: translateY(-1px);
+      }
+
+      /* ---------------- stack ---------------- */
+      .stack-grid {
+        overflow: hidden;
+      }
+      .stack-row {
+        display: grid;
+        grid-template-columns: 210px 1fr;
+        border-bottom: var(--line);
+      }
+      .stack-row:last-child {
+        border-bottom: none;
+      }
+      @media (max-width: 640px) {
+        .stack-row {
+          grid-template-columns: 1fr;
+        }
+      }
+      .stack-cat {
+        font-family: var(--pix);
+        font-size: 0.66rem;
+        color: var(--cloud-glow);
+        padding: 16px 18px;
+        border-right: var(--line);
+        background: rgba(90, 63, 160, 0.08);
+        display: flex;
+        align-items: center;
+      }
+      @media (max-width: 640px) {
+        .stack-cat {
+          border-right: none;
+          border-bottom: var(--line);
+        }
+      }
+      .stack-items {
+        padding: 16px 18px;
+        font-family: var(--mono);
+        font-size: 0.85rem;
+        line-height: 1.75;
+        color: var(--txt);
+      }
+
+      /* ---------------- sobre mí ---------------- */
+      .about-grid {
+        display: grid;
+        grid-template-columns: 1.3fr 0.8fr;
+        gap: 34px;
+      }
+      @media (max-width: 760px) {
+        .about-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .about-grid p {
+        margin-bottom: 14px;
+        max-width: 60ch;
+      }
+      .facts {
+        font-family: var(--mono);
+        font-size: 0.82rem;
+        overflow: hidden;
+      }
+      .facts div {
+        padding: 12px 16px;
+        border-bottom: var(--line);
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        color: var(--txt);
+      }
+      .facts div:last-child {
+        border-bottom: none;
+      }
+      .facts span:first-child {
+        font-size: 0.68rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--txt-dim);
+      }
+
+      /* ---------------- contacto ---------------- */
+      .contact {
+        border-bottom: none;
+        padding-bottom: 30px;
+        position: relative;
+        overflow: hidden;
+      }
+      .contact .wrap {
+        position: relative;
+        z-index: 2;
+      }
+      .bigmail {
+        display: inline-block;
+        font-family: var(--display);
+        font-weight: 800;
+        font-size: clamp(1.3rem, 3.8vw, 2.4rem);
+        letter-spacing: -0.01em;
+        color: var(--txt);
+        text-decoration: none;
+        margin-top: 12px;
+        border: 1px solid rgba(196, 181, 240, 0.3);
+        border-radius: 14px;
+        background: linear-gradient(
+          135deg,
+          var(--cloud-deep),
+          var(--cloud-mid)
+        );
+        box-shadow: 0 18px 50px -20px rgba(90, 63, 160, 0.7);
+        padding: 16px 28px;
+        transition:
+          transform 0.18s ease,
+          box-shadow 0.18s ease;
+      }
+      .bigmail:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 26px 60px -20px rgba(139, 111, 216, 0.8);
+      }
+      .contact-links {
+        margin-top: 30px;
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .contact-sky {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 170px;
+        z-index: 0;
+        opacity: 0.5;
+        pointer-events: none;
+      }
+
+      footer {
+        padding: 46px 0 30px;
+        font-family: var(--mono);
+        font-size: 0.73rem;
+        color: var(--txt-dim);
+      }
+      footer .wrap {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- nube pixel reutilizable, dibujada en grilla de 1u -->
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <defs>
+        <g id="px-cloud">
+          <rect x="4" y="0" width="7" height="2" />
+          <rect x="2" y="2" width="12" height="2" />
+          <rect x="0" y="4" width="17" height="3" />
+          <rect x="13" y="2" width="3" height="2" />
+          <rect x="6" y="-1" width="3" height="1" fill-opacity=".55" />
+        </g>
+        <g id="px-moon">
+          <rect x="2" y="0" width="6" height="1" />
+          <rect x="1" y="1" width="8" height="1" />
+          <rect x="0" y="2" width="10" height="5" />
+          <rect x="1" y="7" width="8" height="1" />
+          <rect x="2" y="8" width="6" height="1" />
+          <rect x="3" y="2" width="2" height="2" fill-opacity=".35" />
+          <rect x="6" y="5" width="1" height="1" fill-opacity=".35" />
+        </g>
+      </defs>
+    </svg>
+
+    <header>
+      <div class="bar">
+        <a class="brand" href="#top">tomadin<b>.</b>dev</a>
+        <nav>
+          <a class="navlink" href="#produccion" data-i18n="nav_prod"
+            >en producción</a
+          >
+          <a class="navlink" href="#proyectos" data-i18n="nav_proj"
+            >proyectos</a
+          >
+          <a class="navlink" href="#stack">stack</a>
+          <a class="navlink" href="#contacto" data-i18n="nav_contact"
+            >contacto</a
+          >
+          <div class="lang" role="group" aria-label="Idioma / Language">
+            <button id="btn-es" aria-pressed="true" onclick="setLang('es')">
+              ES
+            </button>
+            <button id="btn-en" aria-pressed="false" onclick="setLang('en')">
+              EN
+            </button>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main id="top">
+      <!-- ================= HERO ================= -->
+      <div class="hero">
+        <div class="sky" aria-hidden="true">
+          <div class="stars" id="stars"></div>
+          <svg
+            class="pxl moon"
+            width="60"
+            height="54"
+            viewBox="0 0 10 9"
+            fill="#f3eedd"
+          >
+            <use href="#px-moon" />
+          </svg>
+          <div class="cloud drift-b" style="top: 16%; left: 0; opacity: 0.5">
+            <svg
+              class="pxl"
+              width="290"
+              height="120"
+              viewBox="0 0 17 8"
+              fill="#3b2d6e"
+            >
+              <use href="#px-cloud" />
+            </svg>
+          </div>
+          <div class="cloud drift-a" style="top: 40%; left: 0; opacity: 0.75">
+            <svg
+              class="pxl"
+              width="210"
+              height="88"
+              viewBox="0 0 17 8"
+              fill="#5a3fa0"
+            >
+              <use href="#px-cloud" />
+            </svg>
+          </div>
+          <div class="cloud drift-c" style="top: 62%; left: 0; opacity: 0.9">
+            <svg
+              class="pxl"
+              width="150"
+              height="62"
+              viewBox="0 0 17 8"
+              fill="#8b6fd8"
+            >
+              <use href="#px-cloud" />
+            </svg>
+          </div>
+          <div
+            class="cloud drift-b"
+            style="top: 78%; left: 0; opacity: 0.4; animation-delay: -60s"
+          >
+            <svg
+              class="pxl"
+              width="340"
+              height="140"
+              viewBox="0 0 17 8"
+              fill="#2c2154"
+            >
+              <use href="#px-cloud" />
+            </svg>
+          </div>
+          <div
+            class="cloud drift-a"
+            style="top: 8%; left: 0; opacity: 0.35; animation-delay: -40s"
+          >
+            <svg
+              class="pxl"
+              width="120"
+              height="50"
+              viewBox="0 0 17 8"
+              fill="#6b4fb8"
+            >
+              <use href="#px-cloud" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="hero-content">
+          <div class="wrap">
+            <div class="eyebrow">
+              <span data-i18n="eb_role">Backend Developer</span>
+              <span>Java · Spring Boot</span>
+              <span data-i18n="eb_loc">Mendoza, Argentina — remoto</span>
+            </div>
+            <h1 data-i18n="hero_h1">
+              Backends que ya están <em>en producción</em>.
+            </h1>
+            <p class="lead" data-i18n="hero_lead">
+              Soy Brian Tomadin, desarrollador backend especializado en Java y
+              Spring Boot. Diseñé, construí y opero un sistema de gestión que
+              una empresa de seguridad privada usa todos los días en Mendoza, bajo contrato. No muestro tutoriales: muestro software
+              funcionando con un cliente.
+            </p>
+            <div class="statusline" aria-label="Estado del sistema">
+              <span
+                ><span class="dot" aria-hidden="true"></span
+                ><b>custodial</b></span
+              >
+              <span data-i18n="st_env">entorno: producción</span>
+              <span>mendoza</span>
+              <span data-i18n="st_since">operación 24/7</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= CASO REAL ================= -->
+      <section id="produccion">
+        <div class="wrap">
+          <span class="sec-label" data-i18n="lbl_case">★ caso real</span>
+          <h2>Custodial</h2>
+          <div class="case">
+            <div class="case-narrative">
+              <p data-i18n="case_p1">
+                La operación de la empresa se manejaba enteramente por WhatsApp:
+                órdenes, novedades y reportes en chats sueltos, sin forma de
+                comprobar si lo que informaba cada operario era cierto.
+                Custodial reemplaza eso con
+                <strong>registros verificables</strong>: backend en Spring Boot,
+                app Android para el personal en campo y panel de gestión, hoy
+                funcionando en <strong>Mendoza</strong>.
+              </p>
+              <p data-i18n="case_p2">
+                No fue solo escribir código. Levanté requisitos, negocié y registré la
+                obra de software, armé el pipeline de despliegue y hoy opero el
+                sistema en un VPS propio. Soy
+                responsable de que funcione: del esquema de base de datos al
+                certificado TLS.
+              </p>
+              <p data-i18n="case_p3">
+                Control de accesos con historial auditable de ingresos y
+                egresos, incidentes geolocalizados, métricas de productividad
+                por operario, asignación de tareas y notificaciones push con
+                Firebase Cloud Messaging. Autenticación JWT con roles, cache con
+                Redis, todo dockerizado detrás de Nginx.
+              </p>
+              <div class="chips">
+                <span class="chip">Java 21</span
+                ><span class="chip">Spring Boot 3</span>
+                <span class="chip">Spring Security</span
+                ><span class="chip">JWT + RBAC</span>
+                <span class="chip">MySQL</span><span class="chip">Redis</span>
+                <span class="chip">Docker</span><span class="chip">Nginx</span>
+                <span class="chip">FCM</span><span class="chip">Android</span>
+              </div>
+            </div>
+            <aside class="ficha panel">
+              <div class="ficha-head" data-i18n="ficha_head">ficha técnica</div>
+              <table>
+                <tr>
+                  <td data-i18n="f_client">Cliente</td>
+                  <td data-i18n="f_client_v">Empresa de seguridad privada</td>
+                </tr>
+                <tr>
+                  <td data-i18n="f_cover">Cobertura</td>
+                  <td data-i18n="f_cover_v">Mendoza</td>
+                </tr>
+                <tr>
+                  <td data-i18n="f_status">Estado</td>
+                  <td data-i18n="f_status_v">En producción</td>
+                </tr>
+                <tr>
+                  <td data-i18n="f_model">Modelo</td>
+                  <td data-i18n="f_model_v">
+                    Desarrollo y operación · obra registrada (DNDA)
+                  </td>
+                </tr>
+                <tr>
+                  <td data-i18n="f_infra">Infraestructura</td>
+                  <td data-i18n="f_infra_v">VPS Debian · Docker · Nginx</td>
+                </tr>
+                <tr>
+                  <td data-i18n="f_auth">Seguridad</td>
+                  <td data-i18n="f_auth_v">JWT · RBAC · TLS</td>
+                </tr>
+                <tr>
+                  <td data-i18n="f_role">Rol</td>
+                  <td data-i18n="f_role_v">Único desarrollador y operador</td>
+                </tr>
+              </table>
+            </aside>
+          </div>
+
+          <div class="metrics">
+            <div class="metric panel">
+              <div class="num">1</div>
+              <div class="lab" data-i18n="m1">provincia en operación</div>
+            </div>
+            <div class="metric panel">
+              <div class="num">24/7</div>
+              <div class="lab" data-i18n="m2">operación continua</div>
+            </div>
+            <div class="metric panel">
+              <div class="num">DNDA</div>
+              <div class="lab" data-i18n="m3">software registrado</div>
+            </div>
+          </div>
+
+          <div class="viewer panel">
+            <div
+              class="viewer-tabs"
+              role="tablist"
+              aria-label="Pantallas de Custodial"
+            >
+              <span class="tab-group" data-i18n="tg_web">panel web</span>
+              <button
+                class="vtab"
+                role="tab"
+                aria-selected="true"
+                data-shot="0"
+                data-i18n="tab1"
+              >
+                accesos
+              </button>
+              <button
+                class="vtab"
+                role="tab"
+                aria-selected="false"
+                data-shot="1"
+                data-i18n="tab2"
+              >
+                incidentes
+              </button>
+              <button
+                class="vtab"
+                role="tab"
+                aria-selected="false"
+                data-shot="2"
+                data-i18n="tab3"
+              >
+                productividad
+              </button>
+              <span class="tab-group" data-i18n="tg_app">app android</span>
+              <button
+                class="vtab"
+                role="tab"
+                aria-selected="false"
+                data-shot="3"
+                data-i18n="tab4"
+              >
+                tareas
+              </button>
+              <button
+                class="vtab"
+                role="tab"
+                aria-selected="false"
+                data-shot="4"
+                data-i18n="tab5"
+              >
+                pases
+              </button>
+              <button
+                class="vtab"
+                role="tab"
+                aria-selected="false"
+                data-shot="5"
+                data-i18n="tab6"
+              >
+                emergencias
+              </button>
+            </div>
+            <figure class="viewer-stage">
+              <img
+                id="stage-img"
+                src="img/custodial-web-accesos.png"
+                alt="Captura de Custodial"
+              />
+              <figcaption id="stage-cap">
+                Accesos de prestadores — cada ingreso y egreso queda registrado
+                y es auditable
+              </figcaption>
+            </figure>
+          </div>
+          <p class="gallery-note" data-i18n="g_note">
+            // capturas en entorno local con datos de demostración
+          </p>
+        </div>
+      </section>
+
+      <!-- ================= PROYECTOS ================= -->
+      <section id="proyectos">
+        <div class="wrap">
+          <span class="sec-label" data-i18n="lbl_proj">★ otros proyectos</span>
+          <h2 data-i18n="proj_h2">Código que se puede leer</h2>
+          <div class="projects">
+            <article class="proj panel">
+              <div class="proj-head">
+                <h3 data-i18n="pt_bank">Consultorio Medico</h3>
+                <span class="proj-tag" data-i18n="pt_bank_tag"
+                  >arquitectura de microservicios</span
+                >
+              </div>
+              <div class="proj-body">
+                <p data-i18n="bank_p">
+                  Sistema distribuido basado en microservicios para la gestión
+                  integral de un consultorio: separación de dominios,
+                  comunicación entre servicios y resiliencia.
+                </p>
+                <ul>
+                  <li data-i18n="bank_l1">Spring Cloud (Gateway y Service Discovery)</li>
+                  <li data-i18n="bank_l2">Comunicación entre servicios desacoplada</li>
+                  <li data-i18n="bank_l3">Persistencia independiente por dominio</li>
+                  <li data-i18n="bank_l4">Dockerización y orquestación local</li>
+                </ul>
+              </div>
+              <div class="proj-foot">
+                <a
+                  class="btn"
+                  href="https://github.com/Tomadin/consultorio-microservicios"
+                  target="_blank"
+                  rel="noopener"
+                  data-i18n="see_repo"
+                  >Ver repositorio ↗</a
+                >
+                <!-- Verificá que este enlace corresponda al repositorio público del proyecto. -->
+              </div>
+            </article>
+
+            <article class="proj panel">
+              <div class="proj-head">
+                <h3>SwissRoute</h3>
+                <span class="proj-tag" data-i18n="pt_swiss"
+                  >api rest · hackathon</span
+                >
+              </div>
+              <div class="proj-body">
+                <p data-i18n="swiss_p">
+                  API construida en equipo durante una hackathon: consume la API
+                  pública de transporte suizo y expone rutas y horarios con
+                  autenticación propia.
+                </p>
+                <ul>
+                  <li data-i18n="swiss_l1">Spring Boot + PostgreSQL + JWT</li>
+                  <li data-i18n="swiss_l2">
+                    Integración con API externa (Swiss Public Transport)
+                  </li>
+                  <li data-i18n="swiss_l3">
+                    Migración de JJWT 0.9 a 0.12 en pleno proyecto
+                  </li>
+                  <li data-i18n="swiss_l4">
+                    Modelado de datos y DTOs en equipo
+                  </li>
+                </ul>
+              </div>
+              <div class="proj-foot">
+                <a
+                  class="btn"
+                  href="https://github.com/dazayamil/swissroute-backend"
+                  target="_blank"
+                  rel="noopener"
+                  data-i18n="see_repo2"
+                  >Ver repositorio ↗</a
+                >
+                <!-- Verificá que este enlace corresponda al repositorio público del proyecto. -->
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= STACK ================= -->
+      <section id="stack">
+        <div class="wrap">
+          <span class="sec-label">★ stack</span>
+          <h2 data-i18n="stack_h2">Con qué trabajo</h2>
+          <div class="tech-grid">
+            <div class="tech panel">
+              <img
+                src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg"
+                alt=""
+                loading="lazy"
+              /><span>Java 21</span>
+            </div>
+            <div class="tech panel">
+              <img
+                src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg"
+                alt=""
+                loading="lazy"
+              /><span>Spring Boot 3</span>
+            </div>
+            <div class="tech panel">
+              <img
+                src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg"
+                alt=""
+                loading="lazy"
+              /><span>PostgreSQL</span>
+            </div>
+            <div class="tech panel">
+              <img
+                src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg"
+                alt=""
+                loading="lazy"
+              /><span>MySQL</span>
+            </div>
+            <div class="tech panel">
+              <img
+                src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg"
+                alt=""
+                loading="lazy"
+              /><span>Redis</span>
+            </div>
+            <div class="tech panel">
+              <img
+                src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg"
+                alt=""
+                loading="lazy"
+              /><span>Docker</span>
+            </div>
+            <div class="tech panel">
+              <img
+                src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nginx/nginx-original.svg"
+                alt=""
+                loading="lazy"
+              /><span>Nginx</span>
+            </div>
+            <div class="tech panel">
+              <img
+                src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg"
+                alt=""
+                loading="lazy"
+              /><span>Linux</span>
+            </div>
+            <div class="tech panel">
+              <img
+                src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg"
+                alt=""
+                loading="lazy"
+              /><span>Git</span>
+            </div>
+            <div class="tech panel">
+              <img
+                src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-original.svg"
+                alt=""
+                loading="lazy"
+              /><span>Kubernetes</span>
+            </div>
+            <div class="tech panel">
+              <img
+                src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/android/android-original.svg"
+                alt=""
+                loading="lazy"
+              /><span>Android</span>
+            </div>
+            <div class="tech panel">
+              <img
+                src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-original.svg"
+                alt=""
+                loading="lazy"
+              /><span>Firebase</span>
+            </div>
+          </div>
+          <p class="tech-extra" data-i18n="tech_extra">
+            <b>También:</b> Spring Security · JWT/RBAC · JPA/Hibernate · JUnit 5
+            · Mockito · Swagger/OpenAPI · <b>En formación:</b> seguridad en
+            Kubernetes (RBAC, SecurityContext) · hardening de Linux · auditd /
+            fail2ban
+          </p>
+        </div>
+      </section>
+
+      <!-- ================= SOBRE MÍ ================= -->
+      <section id="sobre">
+        <div class="wrap">
+          <span class="sec-label" data-i18n="lbl_about">★ sobre mí</span>
+          <h2 data-i18n="about_h2">Pienso antes de escribir código</h2>
+          <div class="about-grid">
+            <div>
+              <p data-i18n="about_p1">
+                Estoy en el último tramo de la Tecnicatura en Desarrollo de
+                Software del Instituto Tecnológico Universitario (UNCuyo).
+                Mientras curso, mantengo software en producción para un cliente,
+                lo que me obligó a aprender cosas que no entran en un
+                plan de estudio: contratos, despliegues, incidentes, y decir que no a
+                features que rompen el sistema.
+              </p>
+              <p data-i18n="about_p2">
+                Me interesa el backend con peso real: autenticación,
+                consistencia de datos, concurrencia, seguridad. Mi formación
+                actual incluye hardening de Linux y seguridad en Kubernetes,
+                porque un backend que no se puede operar de forma segura no está
+                terminado.
+              </p>
+              <p data-i18n="about_p3">
+                Me motiva sumarme a un equipo con un fuerte estándar de calidad técnica y con problemas desafiantes, donde pueda madurar mi perfil y asumir la responsabilidad de sistemas en producción.
+              </p>
+            </div>
+            <aside class="me-col">
+              <img
+                class="me-photo"
+                src="img/brian.jpg"
+                alt="Brian Tomadin"
+                width="800"
+                height="1000"
+                loading="lazy"
+              />
+              <div class="facts panel">
+                <div>
+                  <span data-i18n="fa1k">Ubicación</span
+                  ><span data-i18n="fa1v">Mendoza, AR (GMT-3)</span>
+                </div>
+                <div>
+                  <span data-i18n="fa2k">Modalidad</span
+                  ><span data-i18n="fa2v">Remoto / híbrido</span>
+                </div>
+                <div><span data-i18n="fa3k">Inglés</span><span>B2+</span></div>
+                <div>
+                  <span data-i18n="fa4k">Formación</span
+                  ><span>ITU — UNCuyo</span>
+                </div>
+                <div>
+                  <span data-i18n="fa5k">Disponibilidad</span
+                  ><span data-i18n="fa5v">Inmediata</span>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= CONTACTO ================= -->
+      <section id="contacto" class="contact">
+        <div class="contact-sky" aria-hidden="true">
+          <div
+            class="cloud drift-b"
+            style="bottom: 10px; left: 0; opacity: 0.5"
+          >
+            <svg
+              class="pxl"
+              width="220"
+              height="92"
+              viewBox="0 0 17 8"
+              fill="#3b2d6e"
+            >
+              <use href="#px-cloud" />
+            </svg>
+          </div>
+          <div
+            class="cloud drift-c"
+            style="bottom: 60px; left: 0; opacity: 0.35; animation-delay: -35s"
+          >
+            <svg
+              class="pxl"
+              width="140"
+              height="58"
+              viewBox="0 0 17 8"
+              fill="#5a3fa0"
+            >
+              <use href="#px-cloud" />
+            </svg>
+          </div>
+        </div>
+        <div class="wrap">
+          <span class="sec-label" data-i18n="lbl_contact">★ contacto</span>
+          <h2 data-i18n="contact_h2">¿Hablamos?</h2>
+          <p data-i18n="contact_p">
+            Si buscás un backend developer que ya sabe lo que es sostener
+            producción, escribime.
+          </p>
+          <a
+            class="bigmail"
+            href="https://mail.google.com/mail/?view=cm&fs=1&to=tomadinbrian%40gmail.com&su=Consulta%20sobre%20desarrollo%20de%20software&body=Hola%20Brian%2C%0A%0AVi%20tu%20portfolio%20y%20me%20gustar%C3%ADa%20consultarte%20sobre%20un%20posible%20proyecto%20u%20oportunidad%20de%20desarrollo%20de%20software.%0A%0A%C2%BFPodemos%20coordinar%20para%20hablar%3F%0A%0ASaludos."
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Redactar un correo a tomadinbrian@gmail.com en Gmail"
+            >tomadinbrian@gmail.com</a
+          >
+          <div class="contact-links">
+            <a
+              class="btn"
+              href="https://github.com/Tomadin"
+              target="_blank"
+              rel="noopener"
+              >GitHub ↗</a
+            >
+            <a
+              class="btn"
+              href="https://www.linkedin.com/in/brian-tomadin-20916818b/"
+              target="_blank"
+              rel="noopener"
+              >LinkedIn ↗</a
+            >
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap">
+        <span>© 2026 Brian Tomadin</span>
+      </div>
+    </footer>
+
+    <script>
+      // Cambiá esto a 'en' si querés inglés por defecto:
+      const DEFAULT_LANG = "es";
+
+      const I18N = {
+        en: {
+          nav_prod: "in production",
+          nav_proj: "projects",
+          nav_contact: "contact",
+          f_cover_v: "Mendoza",
+          f_infra_v: "Debian VPS · Docker · Nginx",
+          f_auth_v: "JWT · RBAC · TLS",
+          pt_bank_tag: "microservices architecture",
+          eb_role: "Backend Developer",
+          eb_loc: "Mendoza, Argentina — remote",
+          hero_h1: "Backends that already run <em>in production</em>.",
+          hero_lead:
+            "I'm Brian Tomadin, a backend developer specializing in Java and Spring Boot. I designed, built, and now operate a management system used under contract by a private security company in Mendoza. I don't showcase tutorials; I showcase software running in production.",
+          st_env: "environment: production",
+          st_since: "running 24/7",
+          lbl_case: "★ real-world case",
+          case_p1:
+            "The company managed its entire operation through WhatsApp: orders, updates, and reports were scattered across chats, with no reliable way to verify staff reports. Custodial replaces that workflow with <strong>verifiable records</strong>: a Spring Boot backend, an Android app for field staff, and a management dashboard, currently operating in <strong>Mendoza</strong>.",
+          case_p2:
+            "The work went beyond coding. I gathered requirements, negotiated the project, registered the software, built the deployment pipeline, and now operate the system on my own VPS. I'm responsible for keeping it running, from the database schema to the TLS certificate.",
+          case_p3:
+            "The system includes access control with an auditable log of entries and exits, geolocated incidents, a live map of field staff, productivity metrics, task assignment, and push notifications through Firebase Cloud Messaging. It uses JWT-based authentication with roles, Redis caching, and Docker containers behind Nginx.",
+          ficha_head: "technical overview",
+          f_client: "Client",
+          f_client_v: "Private security company",
+          f_cover: "Coverage",
+          f_status: "Status",
+          f_status_v: "In production",
+          f_model: "Model",
+          f_model_v: "Royalty agreement · registered software (DNDA)",
+          f_infra: "Infrastructure",
+          f_auth: "Security",
+          f_role: "Role",
+          f_role_v: "Sole developer and operator",
+          m1: "province in operation",
+          m2: "continuous operation",
+          m3: "registered software",
+          tg_web: "web panel",
+          tg_app: "android app",
+          tab1: "access log",
+          tab2: "incidents",
+          tab3: "productivity",
+          tab4: "tasks",
+          tab5: "gate passes",
+          tab6: "emergencies",
+          cap1: "Provider access log — every entry and exit is recorded and auditable",
+          cap2: "Geolocated incidents with full traceability",
+          cap3: "Per-guard productivity, measured with data",
+          capm1: "Tasks assigned to the guard",
+          capm2: "Active passes control at the gatehouse",
+          capm3: "Emergency numbers one tap away",
+          g_note: "// screenshots from a local environment with demo data",
+          ph_me: "your photo here<br>(4:5, neutral background)",
+          lbl_proj: "★ other projects",
+          proj_h2: "Code you can actually read",
+          pt_bank: "Medical Clinic",
+          bank_p:
+            "A microservices-based system for managing a medical practice, with separated domains, inter-service communication, and resilience mechanisms.",
+          bank_l1: "Spring Cloud Gateway and Service Discovery",
+          bank_l2: "Decoupled inter-service communication",
+          bank_l3: "Independent persistence by domain",
+          bank_l4: "Dockerization and local orchestration",
+          see_repo: "View repository ↗",
+          see_repo2: "View repository ↗",
+          pt_swiss: "rest api · hackathon",
+          swiss_p:
+            "An API built with a team during a hackathon: it consumes the Swiss public transport API and exposes routes and schedules with its own authentication.",
+          swiss_l1: "Spring Boot + PostgreSQL + JWT",
+          swiss_l2: "External API integration (Swiss Public Transport)",
+          swiss_l3: "JJWT migration from 0.9 to 0.12 mid-project",
+          swiss_l4: "Team-based data modeling and DTOs",
+          stack_h2: "What I work with",
+          tech_extra:
+            "<b>Also:</b> Spring Security · JWT/RBAC · JPA/Hibernate · JUnit 5 · Mockito · Swagger/OpenAPI · <b>Currently learning:</b> Kubernetes security (RBAC, SecurityContext) · Linux hardening · auditd / fail2ban",
+          lbl_about: "★ about",
+          about_h2: "I think before I write code",
+          about_p1:
+            "I'm in the final stage of the Software Development degree at the Instituto Tecnológico Universitario (UNCuyo). While studying, I maintain production software for a client, which has taught me things beyond the study plan: contracts, deployments, incidents, and when to reject features that could compromise the system.",
+          about_p2:
+            "I care about backend work with real weight: authentication, data consistency, concurrency, security. My current training includes Linux hardening and Kubernetes security, because a backend you can't operate safely isn't finished.",
+          about_p3:
+            "I'm motivated to join a team with high technical quality standards and challenging problems, where I can develop my profile and take responsibility for production systems.",
+          fa1k: "Location",
+          fa1v: "Mendoza, AR (GMT-3)",
+          fa2k: "Work mode",
+          fa2v: "Remote / hybrid",
+          fa3k: "English",
+          fa4k: "Education",
+          fa5k: "Availability",
+          fa5v: "Immediate",
+          lbl_contact: "★ contact",
+          contact_h2: "Let's talk",
+          contact_p:
+            "If you're looking for a backend developer who already knows what it means to keep production alive, write to me.",
+        },
+        es: {
+          nav_prod: "en producción",
+          nav_proj: "proyectos",
+          nav_contact: "contacto",
+          f_cover_v: "Mendoza",
+          f_infra_v: "VPS Debian · Docker · Nginx",
+          f_auth_v: "JWT · RBAC · TLS",
+          pt_bank_tag: "arquitectura de microservicios",
+          eb_role: "Backend Developer",
+          eb_loc: "Mendoza, Argentina — remoto",
+          hero_h1: "Backends que ya están <em>en producción</em>.",
+          hero_lead:
+            "Soy Brian Tomadin, desarrollador backend especializado en Java y Spring Boot. Diseñé, construí y opero un sistema de gestión que una empresa de seguridad privada usa todos los días en Mendoza, bajo contrato. No muestro tutoriales: muestro software funcionando con un cliente.",
+          st_env: "entorno: producción",
+          st_since: "operación 24/7",
+          lbl_case: "★ caso real",
+          case_p1:
+            "La operación de la empresa se manejaba enteramente por WhatsApp: órdenes, novedades y reportes en chats sueltos, sin forma de comprobar si lo que informaba cada operario era cierto. Custodial reemplaza eso con <strong>registros verificables</strong>: backend en Spring Boot, app Android para el personal en campo y panel de gestión, hoy funcionando en <strong>Mendoza</strong>.",
+          case_p2:
+            "No fue solo escribir código. Levanté requisitos, negocié y registré la obra de software, armé el pipeline de despliegue y hoy opero el sistema en un VPS propio. Soy responsable de que funcione: del esquema de base de datos al certificado TLS.",
+          case_p3:
+            "Control de accesos con historial auditable de ingresos y egresos, incidentes geolocalizados, métricas de productividad por operario, asignación de tareas y notificaciones push con Firebase Cloud Messaging. Autenticación JWT con roles, cache con Redis, todo dockerizado detrás de Nginx.",
+          ficha_head: "ficha técnica",
+          f_client: "Cliente",
+          f_client_v: "Empresa de seguridad privada",
+          f_cover: "Cobertura",
+          f_status: "Estado",
+          f_status_v: "En producción",
+          f_model: "Modelo",
+          f_model_v: "Desarrollo y operación · obra registrada (DNDA)",
+          f_infra: "Infraestructura",
+          f_auth: "Seguridad",
+          f_role: "Rol",
+          f_role_v: "Único desarrollador y operador",
+          m1: "provincia en operación",
+          m2: "operación continua",
+          m3: "software registrado",
+          tg_web: "panel web",
+          tg_app: "app android",
+          tab1: "accesos",
+          tab2: "incidentes",
+          tab3: "productividad",
+          tab4: "tareas",
+          tab5: "pases",
+          tab6: "emergencias",
+          cap1: "Accesos de prestadores — cada ingreso y egreso queda registrado y es auditable",
+          cap2: "Incidentes geolocalizados con trazabilidad",
+          cap3: "Productividad por operario, medida con datos",
+          capm1: "Tareas asignadas al vigilador",
+          capm2: "Control de pases activos en garita",
+          capm3: "Números de emergencia a un toque",
+          g_note: "// capturas en entorno local con datos de demostración",
+          ph_me: "tu foto acá<br>(4:5, fondo neutro)",
+          lbl_proj: "★ otros proyectos",
+          proj_h2: "Código que se puede leer",
+          pt_bank: "Consultorio Medico",
+          bank_p:
+            "Sistema distribuido basado en microservicios para la gestión integral de un consultorio: separación de dominios, comunicación entre servicios y resiliencia.",
+          bank_l1: "Spring Cloud (Gateway y Service Discovery)",
+          bank_l2: "Comunicación entre servicios desacoplada",
+          bank_l3: "Persistencia independiente por dominio",
+          bank_l4: "Dockerización y orquestación local",
+          see_repo: "Ver repositorio ↗",
+          see_repo2: "Ver repositorio ↗",
+          pt_swiss: "api rest · hackathon",
+          swiss_p:
+            "API construida en equipo durante una hackathon: consume la API pública de transporte suizo y expone rutas y horarios con autenticación propia.",
+          swiss_l1: "Spring Boot + PostgreSQL + JWT",
+          swiss_l2: "Integración con API externa (Swiss Public Transport)",
+          swiss_l3: "Migración de JJWT 0.9 a 0.12 en pleno proyecto",
+          swiss_l4: "Modelado de datos y DTOs en equipo",
+          stack_h2: "Con qué trabajo",
+          tech_extra:
+            "<b>También:</b> Spring Security · JWT/RBAC · JPA/Hibernate · JUnit 5 · Mockito · Swagger/OpenAPI · <b>En formación:</b> seguridad en Kubernetes (RBAC, SecurityContext) · hardening de Linux · auditd / fail2ban",
+          lbl_about: "★ sobre mí",
+          about_h2: "Pienso antes de escribir código",
+          about_p1:
+            "Estoy en el último tramo de la Tecnicatura en Desarrollo de Software del Instituto Tecnológico Universitario (UNCuyo). Mientras curso, mantengo software en producción para un cliente, lo que me obligó a aprender cosas que no entran en un plan de estudio: contratos, despliegues, incidentes, y decir que no a features que rompen el sistema.",
+          about_p2:
+            "Me interesa el backend con peso real: autenticación, consistencia de datos, concurrencia, seguridad. Mi formación actual incluye hardening de Linux y seguridad en Kubernetes, porque un backend que no se puede operar de forma segura no está terminado.",
+          about_p3:
+            "Me motiva sumarme a un equipo con un fuerte estándar de calidad técnica y con problemas desafiantes, donde pueda madurar mi perfil y asumir la responsabilidad de sistemas en producción.",
+          fa1k: "Ubicación",
+          fa1v: "Mendoza, AR (GMT-3)",
+          fa2k: "Modalidad",
+          fa2v: "Remoto / híbrido",
+          fa3k: "Inglés",
+          fa4k: "Formación",
+          fa5k: "Disponibilidad",
+          fa5v: "Inmediata",
+          lbl_contact: "★ contacto",
+          contact_h2: "¿Hablamos?",
+          contact_p:
+            "Si buscás un backend developer que ya sabe lo que es sostener producción, escribime.",
+        },
+      };
+
+      let currentLang = DEFAULT_LANG;
+      let currentShot = 0;
+
+      const SHOTS = [
+        { src: "img/custodial-web-accesos.png", cap: "cap1", portrait: false },
+        {
+          src: "img/custodial-web-incidente.png",
+          cap: "cap2",
+          portrait: false,
+        },
+        {
+          src: "img/custodial-web-productividad.png",
+          cap: "cap3",
+          portrait: false,
+        },
+        { src: "img/custodial-app-tareas.png", cap: "capm1", portrait: true },
+        { src: "img/custodial-app-pases.png", cap: "capm2", portrait: true },
+        {
+          src: "img/custodial-app-emergencias.png",
+          cap: "capm3",
+          portrait: true,
+        },
+      ];
+
+      function showShot(i) {
+        currentShot = i;
+        const img = document.getElementById("stage-img");
+        const cap = document.getElementById("stage-cap");
+        const shot = SHOTS[i];
+        img.classList.add("fading");
+        img.onload = () => {
+          img.classList.remove("fading");
+          img.onload = null;
+          img.onerror = null;
+        };
+        img.onerror = () => {
+          img.classList.remove("fading");
+          img.onerror = null;
+          img.onload = null;
+          console.error("Could not load screenshot:", shot.src);
+        };
+        setTimeout(() => {
+          img.alt = I18N[currentLang][shot.cap].replace(/<[^>]*>/g, "");
+          img.classList.toggle("portrait", shot.portrait);
+          cap.innerHTML = I18N[currentLang][shot.cap];
+          img.src = shot.src;
+          if (img.complete) img.classList.remove("fading");
+        }, 120);
+        document
+          .querySelectorAll(".vtab")
+          .forEach((b) =>
+            b.setAttribute("aria-selected", Number(b.dataset.shot) === i),
+          );
+      }
+
+      document
+        .querySelectorAll(".vtab")
+        .forEach((b) =>
+          b.addEventListener("click", () => showShot(Number(b.dataset.shot))),
+        );
+
+      // precarga para que el cambio de pestaña sea instantáneo
+      window.addEventListener("load", () =>
+        SHOTS.forEach((s) => {
+          const im = new Image();
+          im.src = s.src;
+        }),
+      );
+
+      function setLang(lang) {
+        currentLang = lang;
+        document.documentElement.lang = lang;
+        document.title = I18N[lang].page_title;
+        const metaDescription = document.getElementById("meta-description");
+        if (metaDescription) {
+          metaDescription.setAttribute("content", I18N[lang].page_description);
+        }
+        document.querySelectorAll("[data-i18n]").forEach((el) => {
+          const v = I18N[lang][el.dataset.i18n];
+          if (v !== undefined) el.innerHTML = v;
+        });
+        document
+          .getElementById("btn-es")
+          .setAttribute("aria-pressed", lang === "es");
+        document
+          .getElementById("btn-en")
+          .setAttribute("aria-pressed", lang === "en");
+        document.getElementById("stage-cap").innerHTML =
+          I18N[lang][SHOTS[currentShot].cap];
+      }
+
+      // estrellas pixel generadas una sola vez (posiciones deterministas)
+      (function makeStars() {
+        const c = document.getElementById("stars");
+        let seed = 42;
+        const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+        for (let i = 0; i < 46; i++) {
+          const s = document.createElement("span");
+          s.className = "star" + (rnd() > 0.5 ? " s2" : "");
+          s.style.left = (rnd() * 100).toFixed(2) + "%";
+          s.style.top = (rnd() * 88).toFixed(2) + "%";
+          s.style.animationDelay = (rnd() * 4).toFixed(2) + "s";
+          c.appendChild(s);
+        }
+      })();
+
+      setLang(DEFAULT_LANG);
+    </script>
+  </body>
+</html>
